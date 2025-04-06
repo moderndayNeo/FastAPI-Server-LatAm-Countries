@@ -24,3 +24,13 @@ countries = [
 @app.get("/countries")
 def get_countries():
     return countries
+
+@app.post("/countries")
+def create_country(country: dict):
+    # Generate a new ID for the country
+    new_id = max(c['id'] for c in countries) + 1 if countries else 1
+    country['id'] = new_id
+    countries.append(country)
+    return {"message": "Country added successfully", "country": country}
+
+
