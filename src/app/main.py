@@ -10,13 +10,14 @@ countries = [
         "name": "Colombia",
         "capital": "Bogota",
         "population": 50000000,
-
+        "typical_dish": "Ajiaco",
     },
     {
         "id": 2,
         "name": "Brazil",
         "capital": "Brasilia",
         "population": 211000000,
+        "typical_dish": "Feijoada",
     }
 ]
 
@@ -48,3 +49,13 @@ def delete_country(country_id: int):
             del countries[index]
             return {"message": "Country deleted successfully"}
     return {"message": "Country not found"}
+
+@app.put("/countries/{country_id}")
+def update_country(country_id: int, updated_country: dict):
+    for index, country in enumerate(countries):
+        if country['id'] == country_id:
+            countries[index] = {**country, **updated_country}
+            countries[index]['id'] = country_id  # Ensure the ID remains unchanged
+            return {"message": "Country updated successfully", "country": countries[index]}
+    return {"message": "Country not found"}
+
