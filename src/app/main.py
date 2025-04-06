@@ -2,8 +2,6 @@ from fastapi import FastAPI
 
 app = FastAPI()
 
-
-# Create an empty array named "countries"
 countries = [
     {
         "id": 1,
