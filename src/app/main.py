@@ -41,3 +41,10 @@ def get_country(country_id: int):
             return country
     return {"message": "Country not found"}
 
+@app.delete("/countries/{country_id}")
+def delete_country(country_id: int):
+    for index, country in enumerate(countries):
+        if country['id'] == country_id:
+            del countries[index]
+            return {"message": "Country deleted successfully"}
+    return {"message": "Country not found"}
