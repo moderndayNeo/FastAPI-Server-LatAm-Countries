@@ -34,3 +34,10 @@ def create_country(country: dict):
     return {"message": "Country added successfully", "country": country}
 
 
+@app.get("/countries/{country_id}")
+def get_country(country_id: int):
+    for country in countries:
+        if country['id'] == country_id:
+            return country
+    return {"message": "Country not found"}
+
