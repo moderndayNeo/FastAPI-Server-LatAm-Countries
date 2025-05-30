@@ -1,0 +1,1 @@
+# Tests package for the FastAPI LATAM Countries application
