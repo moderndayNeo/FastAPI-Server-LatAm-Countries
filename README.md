@@ -51,6 +51,9 @@ This project is a web application built using FastAPI, a modern, fast (high-perf
 - `GET /countries/{country_id}`: Retrieve a specific country by ID.
 - `DELETE /countries/{country_id}`: Delete a specific country by ID.
 - `PUT /countries/{country_id}`: Update a specific country by ID.
+- `POST /signup`: Create a new user account.
+- `POST /login`: Authenticate and start a session (sets a cookie).
+- `POST /logout`: Clear the current session.
 
 ## Notes
 
