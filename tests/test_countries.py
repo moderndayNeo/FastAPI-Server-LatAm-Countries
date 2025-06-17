@@ -2,13 +2,17 @@ import pytest
 from fastapi.testclient import TestClient
 from src.app.main import app
 
-# Test client - uses the real app with its database
-client = TestClient(app)
+
+@pytest.fixture()
+def client():
+    """Create a TestClient with startup/shutdown events."""
+    with TestClient(app) as c:
+        yield c
 
 class TestCountriesAPI:
     """Test cases for the countries API endpoints"""
 
-    def test_get_countries_returns_list(self):
+    def test_get_countries_returns_list(self, client):
         """Test GET /countries returns a JSON list"""
         response = client.get("/countries")
         assert response.status_code == 200
@@ -18,7 +22,7 @@ class TestCountriesAPI:
         data = response.json()
         assert isinstance(data, list)
 
-    def test_create_and_get_country(self):
+    def test_create_and_get_country(self, client):
         """Test creating a country and then retrieving it"""
         # Create a unique country name to avoid conflicts
         import time
@@ -55,13 +59,13 @@ class TestCountriesAPI:
         assert retrieved_country["typical_dish"] == "Test Dish"
         assert retrieved_country["id"] == country_id
 
-    def test_get_nonexistent_country(self):
+    def test_get_nonexistent_country(self, client):
         """Test GET /countries/{id} with non-existent ID returns 404"""
         response = client.get("/countries/999999")
         assert response.status_code == 404
         assert response.json()["detail"] == "Country not found"
 
-    def test_create_country_validation(self):
+    def test_create_country_validation(self, client):
         """Test that creating a country validates required fields"""
         # Test with missing fields
         incomplete_data = {
@@ -73,7 +77,7 @@ class TestCountriesAPI:
         # Should return 422 for validation error
         assert response.status_code == 422
 
-    def test_countries_endpoint_structure(self):
+    def test_countries_endpoint_structure(self, client):
         """Test that the countries endpoint returns properly structured data"""
         response = client.get("/countries")
         assert response.status_code == 200
