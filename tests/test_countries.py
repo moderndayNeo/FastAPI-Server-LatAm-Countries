@@ -87,3 +87,28 @@ class TestCountriesAPI:
             required_fields = ["id", "name", "capital", "population", "typical_dish"]
             for field in required_fields:
                 assert field in first_country, f"Missing field: {field}"
+
+    def test_delete_country(self):
+        """Test deleting a country removes it from the API"""
+        import time
+
+        unique_name = f"DeleteCountry_{int(time.time())}"
+        country_data = {
+            "name": unique_name,
+            "capital": "Delete Capital",
+            "population": 123456,
+            "typical_dish": "Delete Dish",
+        }
+
+        # Create the country
+        create_resp = client.post("/countries", json=country_data)
+        assert create_resp.status_code == 200
+        country_id = create_resp.json()["id"]
+
+        # Delete the country
+        delete_resp = client.delete(f"/countries/{country_id}")
+        assert delete_resp.status_code == 200
+
+        # Verify it no longer exists
+        get_resp = client.get(f"/countries/{country_id}")
+        assert get_resp.status_code == 404
